@@ -1,9 +1,14 @@
-import { Routes } from '@angular/router';
+import {Routes} from '@angular/router';
 
 export const routes: Routes = [
 
   {
-    path:'',
+    path: 'auth',
+    loadChildren: () => import('./auth/auth.routes')
+  },
+
+  {
+    path: '',
     loadChildren: () => import('./store-front/store-front.routes')
   },
 

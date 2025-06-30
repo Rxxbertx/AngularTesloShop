@@ -27,7 +27,6 @@ export const StoreFrontRoutes: Routes = [
         path:'**',
         component: NotFoundPage
       }
-
     ]
   },
   {
