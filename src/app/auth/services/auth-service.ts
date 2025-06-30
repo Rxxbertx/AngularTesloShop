@@ -20,7 +20,7 @@ export class AuthService {
   private httpClient = inject(HttpClient)
   private _authStatus = signal('checking')
   private _user = signal<User | null>(null)
-  private _token = signal<string | null>(null);
+  private _token = signal<string | null>(localStorage.getItem('token'));
 
   authStatus = computed<AuthStatus>(() => {
     if (this._authStatus() === 'checking') {
@@ -70,11 +70,7 @@ export class AuthService {
       return of(false)
     }
 
-    return this.httpClient.get<AuthResponse>(`${baseUrl}/auth/check-status`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }).pipe(
+    return this.httpClient.get<AuthResponse>(`${baseUrl}/auth/check-status`).pipe(
       tap(res => this.handleAuthSuccess(res))
       , map(() => true)
       , catchError(() => this.handleAuthError())
@@ -84,7 +80,17 @@ export class AuthService {
 
 
 //register
-
+  register(email: string, password: string, fullName: string) {
+    return this.httpClient.post<AuthResponse>(`${baseUrl}/auth/register`, {
+      email: email,
+      password: password,
+      fullName: fullName
+    }, {}).pipe(
+      tap(res => this.handleAuthSuccess(res))
+      , map(() => true)
+      , catchError(() => this.handleAuthError())
+    )
+  }
 
   //handlers
   private handleAuthError() {
@@ -106,6 +112,7 @@ export class AuthService {
     this._token.set(null)
     localStorage.removeItem('token')
   }
+
 
 
 }

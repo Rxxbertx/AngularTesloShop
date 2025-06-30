@@ -1,4 +1,4 @@
-<form class="flex gap-2" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+<form class="flex flex-col gap-2" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
   <label class="input validator">
     <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -56,8 +56,9 @@
     </div>
   }
 
-  <p>
+  <p class="text-black">
     You dont have an account?
+    <br>
     <a routerLink="/auth/register" class="text-accent">Create one</a>
   </p>
 
