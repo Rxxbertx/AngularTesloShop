@@ -55,5 +55,15 @@ export class ProductService {
   }
 
 
+  getProductById(id:string) {
+    const key = `${id}`
 
+    if (this.individualProductsCache.has(key)) {
+      return of(this.individualProductsCache.get(key)!)
+    }
+
+    return this.httpClient.get<Product>(`${baseUrl}/products/${id}`).pipe(
+      tap(values => this.individualProductsCache.set(key, values))
+    )
+  }
 }

@@ -38,6 +38,8 @@ export class AuthService {
 
   token = computed(this._token)
 
+  isAdmin = computed(() => this._user()?.roles.includes('admin')??false)
+
   //rxresource
 
   checkStatusResource = rxResource(
