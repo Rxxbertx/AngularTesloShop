@@ -1,4 +1,8 @@
-import {AfterViewInit, Component, ElementRef, input, viewChild, viewChildren} from '@angular/core';
+import {
+  AfterViewInit, Component, effect, ElementRef, input, OnChanges, SimpleChanges,
+  viewChild,
+  viewChildren
+} from '@angular/core';
 // import Swiper JS
 import Swiper from 'swiper';
 import {Navigation, Pagination} from 'swiper/modules';
@@ -17,21 +21,31 @@ import {ProductImagePipe} from '@products/pipes/product-image-pipe';
   templateUrl: './product-carrousel.html',
   styleUrl: './product-carrousel.css'
 })
-export class ProductCarrousel implements AfterViewInit {
+export class ProductCarrousel implements AfterViewInit, OnChanges {
 
 
   images = input.required<string[]>()
-
   swiperDivElement = viewChild.required<ElementRef>('swiper');
 
   ngAfterViewInit(): void {
+    this.swiperInit()
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['images'].firstChange) {
+      return
+    } else {
+      this.swiperInit()
+    }
+  }
+
+  swiperInit() {
 
     const element = this.swiperDivElement().nativeElement
 
     if (!element) {
       return;
     }
-
 
     const swiper = new Swiper(element, {
       // Optional parameters
@@ -56,9 +70,6 @@ export class ProductCarrousel implements AfterViewInit {
         el: '.swiper-scrollbar',
       },
     });
-
-
   }
-
 
 }

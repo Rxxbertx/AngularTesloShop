@@ -28,6 +28,8 @@ export class ProductDetails implements OnInit {
   router = inject(Router)
 
   wasSaved = signal(false)
+  tempImages = signal<string[]>([])
+  imageFileList : FileList  | undefined = undefined;
 
   productForm = this.fb.group({
     title: ['', Validators.required],
@@ -90,22 +92,44 @@ export class ProductDetails implements OnInit {
     if (this.product().id === 'new') {
 
       const product = await firstValueFrom(
-        this.productService.createProduct(productLike)
+        this.productService.createProduct(productLike, this.imageFileList)
       )
-      this.router.navigate(['/admin/product/', this.product().id])
+      this.router.navigate(['/admin/product/', product.id])
 
 
     } else {
-      const product = await firstValueFrom(
-        this.productService.updateProduct(productLike)
+     await firstValueFrom(
+        this.productService.updateProduct(productLike, this.imageFileList)
       )
 
       this.wasSaved.set(true);
-      setTimeout(()=>{
+      setTimeout(() => {
         this.wasSaved.set(false);
-      },3000)
+      }, 3000)
 
     }
+
+
+  }
+
+  onFilesChanged($event: Event) {
+
+    this.product().images.filter((value: string) => {
+      return !this.tempImages().includes(value);
+    })
+
+
+    const fileList = ($event.target as HTMLInputElement).files;
+    this.tempImages.set([])
+    this.imageFileList = fileList ?? undefined
+
+    //genera unas urls para renderizar esas imagenes
+    const imageUrls = Array.from(fileList ?? []).map((value) => URL.createObjectURL(value));
+
+    this.tempImages.set(imageUrls);
+    this.product().images.push(...imageUrls)
+
+
 
 
   }

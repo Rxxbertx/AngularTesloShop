@@ -14,9 +14,13 @@ export class ProductImagePipe implements PipeTransform {
       return defaultImage;
     }
 
+
     if (value instanceof Array) {
       return value[0] ? imageBaseUrl + value[0] : defaultImage;
     }
+
+    if (value.startsWith('blob:'))
+      return value;
 
     return imageBaseUrl + value;
 
