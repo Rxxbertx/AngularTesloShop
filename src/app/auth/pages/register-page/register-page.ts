@@ -5,11 +5,12 @@ import {AuthService} from '@auth/services/auth-service';
 
 @Component({
   selector: 'app-register-page',
-    imports: [
-        ReactiveFormsModule,
-        RouterLink
-    ],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink
+  ],
   templateUrl: './register-page.html',
+  standalone: true,
   styleUrl: './register-page.css'
 })
 export class RegisterPage {
@@ -23,8 +24,8 @@ export class RegisterPage {
 
   formGroup: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(8)]],
-    fullName: ['', [Validators.required, Validators.minLength(8)]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
+    fullName: ['', [Validators.required, Validators.minLength(6)]],
   })
 
   onSubmit() {
