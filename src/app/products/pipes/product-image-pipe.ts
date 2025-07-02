@@ -1,4 +1,7 @@
 import {Pipe, PipeTransform} from '@angular/core';
+import {environment} from '../../../environments/environment';
+
+const baseUrl = environment.baseUrl;
 
 @Pipe({
   name: 'productImage'
@@ -8,7 +11,6 @@ export class ProductImagePipe implements PipeTransform {
   transform(value: string | string[]): any {
 
     const defaultImage = "/assets/images/no-image.jpg"
-    const imageBaseUrl = "http://localhost:3000/api/files/product/"
 
     if (!value) {
       return defaultImage;
@@ -16,13 +18,13 @@ export class ProductImagePipe implements PipeTransform {
 
 
     if (value instanceof Array) {
-      return value[0] ? imageBaseUrl + value[0] : defaultImage;
+      return value[0] ? baseUrl + value[0] : defaultImage;
     }
 
     if (value.startsWith('blob:'))
       return value;
 
-    return imageBaseUrl + value;
+    return baseUrl + value;
 
   }
 
